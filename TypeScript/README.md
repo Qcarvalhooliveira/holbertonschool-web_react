@@ -1,3 +1,5 @@
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/TypeScript/image/TypeScript.png" width="1000" height="300">
+
 # **Typescript** :computer:
 
 ## **Description** :speech_balloon:
