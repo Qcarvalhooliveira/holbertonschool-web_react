@@ -2,5 +2,5 @@
 
 ## **Table of Contents** :card_index_dividers:
 
-### []()
+### [TypeScript](https://github.com/Qcarvalhooliveira/holbertonschool-web_react/tree/master/TypeScript)
 
