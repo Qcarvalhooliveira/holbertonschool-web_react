@@ -52,12 +52,23 @@ export function executeWork(employee: DirectorInterface | TeacherInterface): str
     }
 }
 
+export type Subjects = 'Math' | 'History';
 
-//const teacher = createEmployee(200);
+export function teachClass(todayClass:Subjects): string {
+    if (todayClass === 'Math') {
+      return 'Teaching Math'
+    } else if (todayClass === 'History') {
+      return 'Teaching History'
+    }
+  }
+
+  
+ //const teacher = createEmployee(200);
 //const director = createEmployee(1000);
-
 
 //console.log(executeWork(teacher));
 //console.log(executeWork(director));
 
+//console.log(teachClass('Math'));
+//console.log(teachClass('History'));
 
