@@ -1,3 +1,5 @@
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/Webpack/image/Webpack.png" width="1000" height="300">
+
 # **Webpack** :computer:
 
 ## **Description:** :speech_balloon:
