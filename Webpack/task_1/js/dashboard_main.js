@@ -1,21 +1,22 @@
+// Importações necessárias
 const $ = require('jquery');
 import _ from 'lodash';
 
-
 $(function() {
-$('body').append('<p>Holberton Dashboard</p>');
-$('body').append('<p>Dashboard data for the students</p>');
-$('body').append($button);
-$('body').append("<p id='count'></p>");
-$("body").append("<p>Copyright - Holberton School</p>");
+    $('body').append('<p>Holberton Dashboard</p>');
+    $('body').append('<p>Dashboard data for the students</p>');
 
-let countClicks = 0;
+    const $button = $('<button>Click here to get started</button>');
+    $('body').append($button);
+    $('body').append("<p id='count'></p>");
+    $('body').append("<p>Copyright - Holberton School</p>");
 
-function updateCounter() {
-    countClicks++;
-    $('#count').text(`${count} clicks on the button`);
-}
+    let countClicks = 0;
 
-$('button').on('click', _debounce(updateCounter));
+    function updateCounter() {
+        countClicks++;
+        $('#count').text(`${countClicks} clicks on the button`);
+    }
 
+    $('button').on('click', _.debounce(updateCounter, 250));
 });
