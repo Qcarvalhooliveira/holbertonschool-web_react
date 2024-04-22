@@ -1,3 +1,5 @@
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/react_intro/image/react.png" width="1000" height="300">>
+
 # **React intro**
 
 ## **Description:** :speech_balloon:
