@@ -18,7 +18,14 @@
     "eject": "react-scripts eject"
   },
   "jest": {
-    "testEnvironment": "node"
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|webp|svg)$": "<rootDir>/src/fileMock.js",
+      "\\.(css)$": "<rootDir>/src/styleMock.js"
+    },
+    "transform": {
+      "^.+\\.[t|j]sx?$": "babel-jest"
+    },
+    "setupFilesAfterEnv": ["<rootDir>/src/setupTests.js"]
   },
   "eslintConfig": {
     "extends": [
@@ -42,6 +49,7 @@
     "@babel/core": "^7.24.4",
     "@babel/plugin-proposal-private-property-in-object": "^7.21.11",
     "@babel/preset-env": "^7.24.4",
+    "@babel/preset-react": "^7.24.1",
     "babel-jest": "^29.7.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.8",
