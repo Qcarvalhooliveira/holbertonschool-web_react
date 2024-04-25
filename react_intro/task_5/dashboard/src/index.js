@@ -1,0 +1,1 @@
+console.log('Webpack está carregando corretamente!');
