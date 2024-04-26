@@ -25,7 +25,7 @@ function App() {
         </div>
       </div>
       <footer className="App-footer">
-        <em><p>{`© ${getFullYear()} - ${getFooterCopy(true)}`}</p></em>
+        <em><p>{`© Copyright ${getFullYear()} - ${getFooterCopy(true)}`}</p></em>
       </footer>
     </div>
   );
