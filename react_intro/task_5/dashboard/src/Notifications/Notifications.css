@@ -1,0 +1,33 @@
+.Notifications {
+    display: block;
+    border: 1vmin;
+    padding: 1vmin;
+  }
+  
+  .Notifications p {
+    font-size: 2.5vmin;
+  }
+  
+  .Notifications ul li {
+    font-size: 2.5vmin;
+  }
+  
+  li[data-priority="default"] {
+    color: blue;
+  }
+  
+  li[data-priority="urgent"] {
+    color: red;
+  }
+  
+  .Notifications button {
+    border: none;
+    padding: 0;
+    width: 30px;
+    height: 30px;
+  }
+  
+  .Notifications .close-icon {
+    width: 20px;
+    height: auto;
+  }
