@@ -1,1 +1,3 @@
-console.log('Webpack está carregando corretamente!');
+import './style.css';
+
+console.log('Webpack project is running...');
