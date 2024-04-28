@@ -1,33 +1,42 @@
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
 .Notifications {
-    display: block;
-    border: 1vmin;
-    padding: 1vmin;
-  }
-  
-  .Notifications p {
-    font-size: 2.5vmin;
-  }
-  
-  .Notifications ul li {
-    font-size: 2.5vmin;
-  }
-  
-  li[data-priority="default"] {
-    color: blue;
-  }
-  
-  li[data-priority="urgent"] {
-    color: red;
-  }
-  
-  .Notifications button {
-    border: none;
-    padding: 0;
-    width: 30px;
-    height: 30px;
-  }
-  
-  .Notifications .close-icon {
-    width: 20px;
-    height: auto;
-  }
+  margin: 15px;
+  border: #e0003c solid 2px;
+  border-style: dashed;
+}
+
+.Notifications img {
+  width: 20px;
+}
+
+.Notifications button {
+  text-decoration: none;
+  border: none;
+  background: none;
+  cursor: pointer; 
+}
+
+.Notifications p {
+  display: flex;
+  padding-top: 20px;
+  margin-left: 10px;
+
+}
+
+.Notifications ul {
+  padding: 20px 10px 20px 40px;
+}
+
+
+li[data-priority="default"] {
+  color: rgb(4, 4, 148);
+}
+
+li[data-priority="urgent"] {
+  color: red;
+}
