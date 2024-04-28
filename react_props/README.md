@@ -1,3 +1,5 @@
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/react_props/image/React%20Props.png" width="1000" height="300">
+
 # **React props** :computer:
 
 ## **Description:** :speech_balloon:
