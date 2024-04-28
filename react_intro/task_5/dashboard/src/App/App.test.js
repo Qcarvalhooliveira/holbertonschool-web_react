@@ -11,7 +11,7 @@ describe('App', () => {
     it('renders a div with the class App-header', () => {
         const wrapper = shallow(<App />);
         expect(wrapper.find('.App-header').length).toBe(1);
-    }); // se der problema tirar esse
+    });
 
     it('renders a div with the class App-body', () => {
         const wrapper = shallow(<App />);

@@ -1,75 +1,41 @@
-.App {
-    height: 80vmin;
-    text-align: center;
-  }
-  
-  .App-logo {
-    height: 30vmin;
-    pointer-events: none;
-    text-align: left;
-  }
-  
-  .App-header {
-    background-color: #282c34;
-    display: flex;
-    position: relative;
-    padding-top: 5vmin;
-    height: 30vmin;
-    text-align: left;
-    justify-content: flex-start;
-    font-size: calc(10px + 2vmin);
-    color: white;
-    background-color: white;
-  }
-  
-  .App-header h1 {
-    display: block;
-    position: relative;
-    height: 15vmin;
-    top: 7.5vmin;
-    color: #E7473A;
-    background-color: #FFFFFF;
-    font-size: 5vmin;
-    font-family: serif;
-  }
-  
-  .App-body {
-    height: 50vmin;
-    text-align: left;
-    padding-left: 5vmin;
-    padding-top: 5vmin;
-    font-size: 2.5vmin;
-    font-family: serif;
-  }
-  
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-  
-  .App-body input {
-    margin-right: 10px;
-    margin-left: 10px;
-  }
-  
-  .App-body button {
-    background-color: white;
-    width: 40px;
-    height: 25px;
-    font-size: 12px;
-    border-radius: 20%;
-    border-style: solid;
-    border-width: thin;
-  }
-  
-  .App-footer {
-    font-size: calc(10px + 2vmin);
-    font-family: serif;
-    font-style: italic;
-  }
-  
-  hr {
-    height: 0.5vmin;
-    border: none;
-    display: block;
-    background-color: #E7473A;
-    margin: 0;
-    padding: 0;
-  }
+.App-header{
+  display: flex;
+  border-bottom: #e0003c solid 4px;
+}
+
+.App-header img{
+  width: 200px;
+}
+.App-header h1{
+  display: flex;
+  align-items: center;
+  color: #e0003c;
+}
+
+.App-body{
+  display: flex;
+  flex-direction: column;
+  padding: 45px;
+  gap: 20px;
+  height: 400px;
+  border-bottom: #e0003c solid 4px;
+}
+
+.App-body_container{
+  display: flex;
+  gap: 10px;
+}
+
+
+.App-footer{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+}
