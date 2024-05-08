@@ -1,3 +1,5 @@
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/tree/master/React_component/image" idth="1000" height="300">
+
 # **React Component** :computer:
 
 ## **Description** :speech_balloon:
