@@ -6,6 +6,8 @@ import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
 import CourseList from '../CourseList/CourseList';
 import Notifications from '../Notifications/Notifications';
+import BodySection from '../BodySection/BodySection';
+import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 
 class App extends Component {
   constructor(props) {
@@ -52,7 +54,18 @@ class App extends Component {
           <Notifications listNotifications={listNotifications}/>
           <Header />
           <div className="App-body">
-            {isLoggedIn ? <CourseList listCourses={listCourses} /> : <Login />}
+            {isLoggedIn ? (
+              <BodySectionWithMarginBottom title="Course list">
+                <CourseList listCourses={listCourses} />
+              </BodySectionWithMarginBottom>
+            ) : (
+              <BodySectionWithMarginBottom title="Log in to continue">
+                <Login />
+              </BodySectionWithMarginBottom>
+            )}
+            <BodySection title="News from the School">
+              <p>Keep up to date with the latest news from our school by checking back here regularly for updates and announcements.</p>
+            </BodySection>
           </div>
           <Footer />
         </div>
