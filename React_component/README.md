@@ -1,4 +1,4 @@
-<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/React_component/image/React-component.jpg" idth="1000" height="300">
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/React_component/image/React-component.jpg" width="1000" height="300">
 
 # **React Component** :computer:
 
