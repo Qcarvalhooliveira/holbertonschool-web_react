@@ -1,3 +1,5 @@
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/React_inline_styling/image/react_inline_styling.png"  width="1000" height="300">
+
 # **React inline styling** :computer:
 
 ## **Description** :speech_balloon:
