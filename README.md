@@ -11,3 +11,5 @@
 ### [react_props](https://github.com/Qcarvalhooliveira/holbertonschool-web_react/tree/master/react_props)
 
 ### [React_component](https://github.com/Qcarvalhooliveira/holbertonschool-web_react/tree/master/React_component)
+
+### [React_inline_styling](https://github.com/Qcarvalhooliveira/holbertonschool-web_react/tree/master/React_inline_styling)
