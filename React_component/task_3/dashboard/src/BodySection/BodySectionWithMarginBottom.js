@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import BodySection from './BodySection';
-import './BodySectionWithMarginBottom.css';
+import './BodySection.css';
 
 function BodySectionWithMarginBottom(props) {
     return (
