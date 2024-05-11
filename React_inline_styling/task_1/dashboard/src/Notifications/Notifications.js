@@ -24,18 +24,18 @@ class Notifications extends Component {
 
     return (
       <>
-        <div className={css(styles.notificationsContainer)}>
-          <div className={css(styles.menuItem)}>
+        <div className={css(styles.notificationsContainer)} data-testid="notificationsContainer">
+          <div className={css(styles.menuItem)} data-testid="menuItem">
               Your notifications
           </div>
           {displayDrawer && (              
-              <div className={css(styles.notifications)} style={{ position: 'relative' }}>
+              <div className={css(styles.notifications)} style={{ position: 'relative' }} data-testid="notifications">
                   <button
                       className={css(styles.notificationsButton)}
                       aria-label="Close"
                       onClick={() => console.log('Close button has been clicked')}
-                  >
-                      <img src={closeIcon} alt="Close" style={{width: '20px'}} />
+                      data-testid="closeButton">
+                      <img src={closeIcon} alt="Close" style={{ width: '20px' }} />
                   </button>
                   <p className={css(styles.notificationsP)}>
                       {listNotifications.length > 0 ? 'Here is the list of notifications' : 'No new notification for now'}

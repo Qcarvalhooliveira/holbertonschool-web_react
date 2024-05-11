@@ -6,8 +6,17 @@ import Header from '../Header/Header';
 import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
 import CourseList from '../CourseList/CourseList';
+import { StyleSheetTestUtils } from 'aphrodite';
 
 describe('App', () => {
+  beforeAll(() => {
+    StyleSheetTestUtils.suppressStyleInjection();
+  });
+
+  afterAll(() => {
+    StyleSheetTestUtils.clearBufferAndResumeStyleInjection();
+  });
+
   let wrapper;
 
   beforeEach(() => {
