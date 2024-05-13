@@ -1,15 +1,18 @@
-*{
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-  }
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
 
-.footer{
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 10px;
+  border-top: #e0003c solid 4px;
   margin-top: 400px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    padding: 10px;
-    border-top: #e0003c solid 4px;
+
+  @media (max-width: 900px) {
+      margin-top: 1px;
   }
- 
+}
