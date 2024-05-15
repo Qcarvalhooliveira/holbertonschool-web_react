@@ -7,19 +7,19 @@ function Notifications({ displayDrawer, listNotifications }) {
   const drawerStyle = displayDrawer ? styles.drawerOpen : styles.drawerClosed;
 
   return (
-    <div className={css(styles.notifications, drawerStyle)}>
+    <div className={css(styles.notificationsContainer)}>
       {!displayDrawer && (
         <div className={css(styles.menuItem)} data-testid="menuItem">
           Your notifications
         </div>
       )}
       {displayDrawer && (
-        <>
+        <div className={css(styles.notifications, drawerStyle)}>
           <div className={css(styles.drawerHeader)}>
             <p className={css(styles.headerText)}>Here is your notification list</p>
             <button className={css(styles.closeButton)} onClick={() => console.log('Close button has been clicked')}>X</button>
           </div>
-          <ul className={css(styles.list)}>
+          <ul className={css(styles.notificationsUl)}>
             {listNotifications.map((notification) => (
               <NotificationItem
                 key={notification.id}
@@ -31,7 +31,7 @@ function Notifications({ displayDrawer, listNotifications }) {
               />
             ))}
           </ul>
-        </>
+        </div>
       )}
     </div>
   );
@@ -77,25 +77,41 @@ const opacityChange = {
 };
 
 const styles = StyleSheet.create({
+  notificationsContainer: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    width: '98%',
+    margin: '15px',
+    gap: '15px',
+    position: 'absolute',
+  },
   notifications: {
-    position: 'relative',
-  },
-  drawerClosed: {
-    display: 'block',
-  },
-  drawerOpen: {
-    display: 'block',
+    display: 'flex',
+    flexDirection: 'column',
+    border: '2px dashed #e0003c',
+    alignItems: 'flex-start',
+    width: '40%',
+    position: 'absolute',
+    right: '15px',
     '@media (max-width: 768px)': {
+      border: 'none',
+      width: '100%',
       position: 'fixed',
       top: 0,
       left: 0,
-      width: '100%',
       height: '100%',
       backgroundColor: 'white',
       zIndex: 1000,
       fontSize: '20px',
       padding: 0,
     },
+  },
+  drawerClosed: {
+    display: 'block',
+  },
+  drawerOpen: {
+    display: 'block',
   },
   drawerHeader: {
     display: 'flex',
@@ -123,13 +139,22 @@ const styles = StyleSheet.create({
     cursor: 'pointer',
     float: 'right',
     backgroundColor: '#fff8f8',
+    width: '100%',
     '@media (min-width: 769px)': {
+      justifyContent: 'flex-end',
       float: 'right',
+      backgroundColor: 'initial',
     },
     ':hover': {
       animationName: [bounce, opacityChange],
       animationDuration: '0.5s, 1s',
       animationIterationCount: '3',
+    },
+  },
+  notificationsUl: {
+    padding: '20px 10px 20px 40px',
+    '@media (max-width: 768px)': {
+      padding: 0,
     },
   },
 });
