@@ -1,40 +1,56 @@
-import React from 'react';
+import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
 import NotificationItem from './NotificationItem';
 
-function Notifications({ displayDrawer, listNotifications }) {
-  const drawerStyle = displayDrawer ? styles.drawerOpen : styles.drawerClosed;
+class Notifications extends Component {
+  constructor(props) {
+    super(props);
+    this.markAsRead = this.markAsRead.bind(this);
+  }
 
-  return (
-    <div className={css(styles.notificationsContainer)}>
-      {!displayDrawer && (
-        <div className={css(styles.menuItem)} data-testid="menuItem">
-          Your notifications
-        </div>
-      )}
-      {displayDrawer && (
-        <div className={css(styles.notifications, drawerStyle)}>
-          <div className={css(styles.drawerHeader)}>
-            <p className={css(styles.headerText)}>Here is your notification list</p>
-            <button className={css(styles.closeButton)} onClick={() => console.log('Close button has been clicked')}>X</button>
+  markAsRead(id) {
+    console.log(`Notification ${id} has been marked as read`);
+  }
+
+  shouldComponentUpdate(nextProps) {
+    return nextProps.listNotifications.length > this.props.listNotifications.length;
+  }
+
+  render() {
+    const { displayDrawer, listNotifications, handleDisplayDrawer, handleHideDrawer } = this.props;
+    const drawerStyle = displayDrawer ? styles.drawerOpen : styles.drawerClosed;
+
+    return (
+      <div className={css(styles.notificationsContainer)}>
+        {!displayDrawer && (
+          <div className={css(styles.menuItem)} data-testid="menuItem" onClick={handleDisplayDrawer}>
+            Your notifications
           </div>
-          <ul className={css(styles.notificationsUl)}>
-            {listNotifications.map((notification) => (
-              <NotificationItem
-                key={notification.id}
-                type={notification.type}
-                value={notification.value}
-                html={notification.html}
-                markAsRead={() => console.log(`Notification ${notification.id} has been marked as read`)}
-                id={notification.id}
-              />
-            ))}
-          </ul>
-        </div>
-      )}
-    </div>
-  );
+        )}
+        {displayDrawer && (
+          <div className={css(styles.notifications, drawerStyle)} data-testid="notifications">
+            <div className={css(styles.drawerHeader)}>
+              <p className={css(styles.headerText)}>Here is your notification list</p>
+              <button className={css(styles.closeButton)} onClick={handleHideDrawer}>X</button>
+            </div>
+            <ul className={css(styles.notificationsUl)}>
+              {listNotifications.map((notification) => (
+                <NotificationItem
+                  key={notification.id}
+                  type={notification.type}
+                  value={notification.value}
+                  html={notification.html}
+                  markAsRead={() => this.markAsRead(notification.id)}
+                  id={notification.id}
+                />
+              ))}
+            </ul>
+          </div>
+        )}
+      </div>
+    );
+  }
 }
 
 Notifications.propTypes = {
@@ -49,10 +65,14 @@ Notifications.propTypes = {
       }),
     })
   ).isRequired,
+  handleDisplayDrawer: PropTypes.func,
+  handleHideDrawer: PropTypes.func,
 };
 
 Notifications.defaultProps = {
   displayDrawer: false,
+  handleDisplayDrawer: () => {},
+  handleHideDrawer: () => {},
 };
 
 const bounce = {

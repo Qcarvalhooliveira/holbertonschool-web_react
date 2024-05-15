@@ -27,7 +27,9 @@ class App extends Component {
     };
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.toggleDrawer = this.toggleDrawer.bind(this);
+    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
+    this.handleHideDrawer = this.handleHideDrawer.bind(this);
+    
   }
 
   componentDidMount() {
@@ -45,9 +47,12 @@ class App extends Component {
       this.props.logOut();
     }
   }
+  handleDisplayDrawer() {
+    this.setState({ displayDrawer: true });
+  }
 
-  toggleDrawer() {
-    this.setState((prevState) => ({ displayDrawer: !prevState.displayDrawer }));
+  handleHideDrawer() {
+    this.setState({ displayDrawer: false });
   }
 
   render() {
@@ -58,8 +63,13 @@ class App extends Component {
     return (
       <>
         <div className={css(appStyle)}>
-          <Notifications listNotifications={listNotifications} displayDrawer={displayDrawer} toggleDrawer={this.toggleDrawer} />
-          <Header />
+        <Notifications 
+          listNotifications={listNotifications} 
+          displayDrawer={displayDrawer} 
+          handleDisplayDrawer={this.handleDisplayDrawer} 
+          handleHideDrawer={this.handleHideDrawer} 
+        />
+        <Header />
           <div className={css(styles.appBody)}>
             {isLoggedIn ? (
               <BodySectionWithMarginBottom title="Course list">
