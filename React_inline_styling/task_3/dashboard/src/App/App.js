@@ -22,10 +22,12 @@ class App extends Component {
         { id: 1, type: 'default', value: 'New course available' },
         { id: 2, type: 'urgent', value: 'New resume available' },
         { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } }
-      ]
+      ],
+      displayDrawer: false,
     };
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
+    this.toggleDrawer = this.toggleDrawer.bind(this);
   }
 
   componentDidMount() {
@@ -44,14 +46,19 @@ class App extends Component {
     }
   }
 
+  toggleDrawer() {
+    this.setState((prevState) => ({ displayDrawer: !prevState.displayDrawer }));
+  }
+
   render() {
     const { isLoggedIn } = this.props;
-    const { listCourses, listNotifications } = this.state;
+    const { listCourses, listNotifications, displayDrawer } = this.state;
+    const appStyle = displayDrawer ? styles.appHidden : styles.app;
 
     return (
       <>
-        <div className={css(styles.app)}>
-          <Notifications listNotifications={listNotifications}/>
+        <div className={css(appStyle)}>
+          <Notifications listNotifications={listNotifications} displayDrawer={displayDrawer} toggleDrawer={this.toggleDrawer} />
           <Header />
           <div className={css(styles.appBody)}>
             {isLoggedIn ? (
@@ -76,12 +83,12 @@ class App extends Component {
 
 App.propTypes = {
   isLoggedIn: PropTypes.bool,
-  logOut: PropTypes.func
+  logOut: PropTypes.func,
 };
 
 App.defaultProps = {
   isLoggedIn: false,
-  logOut: () => {}
+  logOut: () => {},
 };
 
 const styles = StyleSheet.create({
@@ -90,11 +97,15 @@ const styles = StyleSheet.create({
     padding: 0,
     boxSizing: 'border-box',
   },
+  appHidden: {
+    display: 'none',
+    '@media (min-width: 769px)': {
+      display: 'block',
+    },
+  },
   appBody: {
-  
     margin: '30px',
     width: '80%',
-    
   },
 });
 
