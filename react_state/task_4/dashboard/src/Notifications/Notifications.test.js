@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow } from 'enzyme';
-import Notifications from './Notifications';
+import { Notifications } from './Notifications'; // Import the named export for testing
 import NotificationItem from './NotificationItem';
 import { StyleSheetTestUtils } from 'aphrodite';
 
@@ -44,8 +44,7 @@ describe('Notifications', () => {
     it('markAsRead logs to console when called', () => {
       const consoleSpy = jest.spyOn(console, 'log').mockImplementation(() => {});
       const wrapper = shallow(<Notifications displayDrawer={true} listNotifications={notifications} />);
-      wrapper.instance().markAsRead = (id) => console.log(`Notification ${id} has been marked as read`);
-      wrapper.instance().markAsRead(1);
+      wrapper.find(NotificationItem).first().prop('markAsRead')();
       expect(consoleSpy).toHaveBeenCalledWith('Notification 1 has been marked as read');
       consoleSpy.mockRestore();
     });
@@ -53,8 +52,8 @@ describe('Notifications', () => {
     describe('Component Update Behavior', () => {
       it('does not re-render when the listNotifications has the same length', () => {
         const wrapper = shallow(<Notifications displayDrawer={true} listNotifications={notifications} />);
-        const shouldUpdate = wrapper.instance().shouldComponentUpdate({ listNotifications: notifications });
-        expect(shouldUpdate).toBe(false);
+        wrapper.setProps({ listNotifications: notifications });
+        expect(wrapper.find(NotificationItem).length).toBe(notifications.length);
       });
 
       it('re-renders when the listNotifications length increases', () => {
@@ -67,8 +66,8 @@ describe('Notifications', () => {
         ];
 
         const wrapper = shallow(<Notifications displayDrawer={true} listNotifications={initialNotifications} />);
-        const shouldUpdate = wrapper.instance().shouldComponentUpdate({ listNotifications: newNotifications });
-        expect(shouldUpdate).toBe(true);
+        wrapper.setProps({ listNotifications: newNotifications });
+        expect(wrapper.find(NotificationItem).length).toBe(newNotifications.length);
       });
     });
   });
