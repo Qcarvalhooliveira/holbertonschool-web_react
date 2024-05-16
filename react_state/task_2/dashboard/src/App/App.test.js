@@ -77,7 +77,7 @@ describe('App', () => {
     });
   });
 
- it('logIn updates the state correctly', () => {
+  it('logIn updates the state correctly', () => {
     wrapper.instance().logIn('test@example.com', 'password');
     expect(wrapper.state('user')).toEqual({
       email: 'test@example.com',
@@ -87,18 +87,6 @@ describe('App', () => {
   });
 
   describe('when isLoggedIn is true', () => {
-    beforeEach(() => {
-      const contextValue = {
-        user: { isLoggedIn: true, email: 'test@example.com' },
-        logOut: jest.fn(),
-      };
-      wrapper = mount(
-        <AppContext.Provider value={contextValue}>
-          <App />
-        </AppContext.Provider>
-      );
-    });
-
     it('does not include the Login component', () => {
       wrapper.setState({ user: { isLoggedIn: true, email: 'test@example.com' } });
       expect(wrapper.find(Login).exists()).toEqual(false);
@@ -111,30 +99,14 @@ describe('App', () => {
   });
 
   describe('Keyboard events', () => {
-    let contextValue;
-    let mockLogOut, mockAlert;
-
-    beforeEach(() => {
-      mockLogOut = jest.fn();
-      mockAlert = jest.spyOn(window, 'alert').mockImplementation(() => {});
-      contextValue = {
-        user: { isLoggedIn: true, email: 'test@example.com' },
-        logOut: mockLogOut,
-      };
-
+    it('calls logOut and updates state when "control" and "h" keys are pressed', () => {
+      const mockLogOut = jest.fn();
+      const mockAlert = jest.spyOn(window, 'alert').mockImplementation(() => {});
       wrapper = mount(
-        <AppContext.Provider value={contextValue}>
+        <AppContext.Provider value={{ user: { isLoggedIn: true, email: 'test@example.com' }, logOut: mockLogOut }}>
           <App />
         </AppContext.Provider>
       );
-    });
-
-    afterEach(() => {
-      mockAlert.mockRestore();
-    });
-
-      it('calls logOut and updates state when "control" and "h" keys are pressed', () => {
-      wrapper.setState({ user: { isLoggedIn: true, email: 'test@example.com' } });
 
       const event = new KeyboardEvent('keydown', {
         key: 'h',
@@ -142,7 +114,6 @@ describe('App', () => {
       });
 
       wrapper.instance().componentDidMount();
-
       window.dispatchEvent(event);
 
       expect(mockAlert).toHaveBeenCalledWith('Logging you out');
@@ -152,6 +123,8 @@ describe('App', () => {
         password: '',
         isLoggedIn: false,
       });
+
+      mockAlert.mockRestore();
     });
   });
 });
