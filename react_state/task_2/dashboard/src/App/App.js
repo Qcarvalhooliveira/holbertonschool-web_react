@@ -30,6 +30,7 @@ class App extends Component {
         password: '',
         isLoggedIn: false,
       },
+  
     };
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -37,7 +38,7 @@ class App extends Component {
     this.handleHideDrawer = this.handleHideDrawer.bind(this);
     this.logOut = this.logOut.bind(this);
     this.logIn = this.logIn.bind(this); 
-    this.markNotificationAsRead = this.markNotificationAsRead.bind(this);
+    
   }
 
   componentDidMount() {
@@ -82,47 +83,41 @@ class App extends Component {
     });
   }
   
-  markNotificationAsRead(id) {
-    this.setState(prevState => ({
-        listNotifications: prevState.listNotifications.filter(notification => notification.id !== id)
-    }));
-}
 
+  render() {
+    const { listCourses, listNotifications, displayDrawer, user } = this.state;
+    const appStyle = displayDrawer ? styles.appHidden : styles.app;
 
-render() {
-  const { listCourses, listNotifications, displayDrawer, user } = this.state;
-  const appStyle = displayDrawer ? styles.appHidden : styles.app;
-
-  return (
-    <AppContext.Provider value={{ user, logOut: this.logOut }}>
-      <div className={css(appStyle)}>
-        <Notifications 
-          listNotifications={listNotifications} 
-          displayDrawer={displayDrawer} 
-          handleDisplayDrawer={this.handleDisplayDrawer} 
-          handleHideDrawer={this.handleHideDrawer} 
-          markNotificationAsRead={this.markNotificationAsRead}
-        />
-        <Header />
-        <div className={css(styles.appBody)}>
+    return (
+      <AppContext.Provider value={{ user, logOut: this.logOut }}>
+        <div className={css(appStyle)}>
+          <Notifications 
+            listNotifications={listNotifications} 
+            displayDrawer={displayDrawer} 
+            handleDisplayDrawer={this.handleDisplayDrawer} 
+            handleHideDrawer={this.handleHideDrawer} 
+          />
+          <Header />
+          <div className={css(styles.appBody)}>
           {user.isLoggedIn ? (
-            <BodySectionWithMarginBottom title="Course list">
-              <CourseList listCourses={listCourses} />
-            </BodySectionWithMarginBottom>
-          ) : (
-            <BodySectionWithMarginBottom title="Log in to continue">
-              <Login logIn={this.logIn} />
-            </BodySectionWithMarginBottom>
-          )}
-          <BodySection title="News from the School">
-            <p>Keep up to date with the latest news from our school by checking back here regularly for updates and announcements.</p>
-          </BodySection>
+  <BodySectionWithMarginBottom title="Course list">
+    <CourseList listCourses={listCourses} />
+  </BodySectionWithMarginBottom>
+) : (
+  <BodySectionWithMarginBottom title="Log in to continue">
+    <Login logIn={this.logIn} />
+  </BodySectionWithMarginBottom>
+)}
+            <BodySection title="News from the School">
+              <p>Keep up to date with the latest news from our school by checking back here regularly for updates and announcements.</p>
+            </BodySection>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </AppContext.Provider>
-  );
-}
+      </AppContext.Provider>
+    );
+  }
+
 }
 
 App.propTypes = {
