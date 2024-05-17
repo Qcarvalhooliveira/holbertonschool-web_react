@@ -1,7 +1,8 @@
 import React from 'react';
-import { shallow } from 'enzyme';
+import { mount } from 'enzyme';
 import { StyleSheetTestUtils } from 'aphrodite';
 import Footer from './Footer';
+import AppContext from '../App/AppContext';
 
 describe('Footer', () => {
   beforeAll(() => {
@@ -13,11 +14,28 @@ describe('Footer', () => {
   });
 
   it('renders without crashing', () => {
-    shallow(<Footer />);
+    mount(
+      <AppContext.Provider value={{ user: { isLoggedIn: false } }}>
+        <Footer />
+      </AppContext.Provider>
+    );
   });
 
-  it('renders Copyright text', () => {
-    const wrapper = shallow(<Footer />);
-    expect(wrapper.text()).toContain('Copyright');
+  it('does not display the Contact link when logged out', () => {
+    const wrapper = mount(
+      <AppContext.Provider value={{ user: { isLoggedIn: false } }}>
+        <Footer />
+      </AppContext.Provider>
+    );
+    expect(wrapper.find('a[href="/contact"]').length).toBe(0);
+  });
+
+  it('displays the Contact link when logged in', () => {
+    const wrapper = mount(
+      <AppContext.Provider value={{ user: { isLoggedIn: true } }}>
+        <Footer />
+      </AppContext.Provider>
+    );
+    expect(wrapper.find('a[href="/contact"]').length).toBe(1);
   });
 });
