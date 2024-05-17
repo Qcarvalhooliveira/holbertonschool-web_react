@@ -10,7 +10,7 @@ function Footer() {
         <footer className={css(styles.footer)}>
             <em>
                 <p>{`© Copyright ${getFullYear()} - ${getFooterCopy(true)}`}</p>
-                {user.isLoggedIn && <p><a href="/contact">Contact us</a></p>} // Usando user.isLoggedIn para verificar o estado de login
+                {user.isLoggedIn && <p><a href="/contact">Contact us</a></p>}
             </em>
         </footer>
     );
