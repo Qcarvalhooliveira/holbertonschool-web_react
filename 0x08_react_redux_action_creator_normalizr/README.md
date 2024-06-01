@@ -1,3 +1,5 @@
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/0x08_react_redux_action_creator_normalizr/image/redux.png" width="1000" height="300">
+
 # **React Redux action creator+normalizr** :computer:
 
 ## **Description:** :speech_balloon:
