@@ -17,3 +17,5 @@
 ### [react_state](https://github.com/Qcarvalhooliveira/holbertonschool-web_react/tree/master/react_state)
 
 ### [0x08_react_redux_action_creator_normalizr](https://github.com/Qcarvalhooliveira/holbertonschool-web_react/tree/master/0x08_react_redux_action_creator_normalizr)
+
+### [react_redux_reducer_selector](https://github.com/Qcarvalhooliveira/holbertonschool-web_react/tree/master/react_redux_reducer_selector)
