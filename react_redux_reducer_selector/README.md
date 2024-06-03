@@ -1,4 +1,4 @@
-<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/react_redux_reducer_selector/image/selector.png" width="1000" height="500">
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/react_redux_reducer_selector/image/selector.png" width="1000" height="400">
 
 # **React Redux reducer+selector** :computer:
 
