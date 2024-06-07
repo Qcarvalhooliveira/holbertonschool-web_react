@@ -1,3 +1,5 @@
+<img src="https://github.com/Qcarvalhooliveira/holbertonschool-web_react/blob/master/react_redux_connectors_and_providers/image/Redux.png" width="1000" height="500">
+
 # **React Redux Connectors and Providers** :computer:
 
 ## **Description:** :speech_balloon:
