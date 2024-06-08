@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
+import { connect } from 'react-redux';
 import Header from '../Header/Header';
 import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
@@ -9,6 +10,13 @@ import Notifications from '../Notifications/Notifications';
 import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import AppContext from './AppContext';
+
+// Function to map state to props
+const mapStateToProps = (state) => {
+  return {
+    isLoggedIn: state.uiReducer.isLoggedIn,
+  };
+};
 
 class App extends Component {
   constructor(props) {
@@ -92,6 +100,7 @@ class App extends Component {
 render() {
   const { listCourses, listNotifications, displayDrawer, user } = this.state;
   const appStyle = displayDrawer ? styles.appHidden : styles.app;
+  const { isLoggedIn } = this.props;
 
   return (
     <AppContext.Provider value={{ user, logOut: this.logOut }}>
@@ -105,7 +114,7 @@ render() {
         />
         <Header />
         <div className={css(styles.appBody)}>
-          {user.isLoggedIn ? (
+          {isLoggedIn ? ( 
             <BodySectionWithMarginBottom title="Course list">
               <CourseList listCourses={listCourses} />
             </BodySectionWithMarginBottom>
@@ -126,11 +135,11 @@ render() {
 }
 
 App.propTypes = {
-
+  isLoggedIn: PropTypes.bool,
 };
 
 App.defaultProps = {
-
+  isLoggedIn: false,
 };
 
 const styles = StyleSheet.create({
@@ -151,4 +160,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default App;
+export default connect(mapStateToProps)(App);
