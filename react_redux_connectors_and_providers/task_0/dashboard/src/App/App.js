@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'; // Import the connect function
 import Header from '../Header/Header';
 import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
@@ -14,7 +14,7 @@ import AppContext from './AppContext';
 
 const mapStateToProps = (state) => {
   return {
-    isLoggedIn: state.uiReducer.isLoggedIn,
+    isLoggedIn: state.ui.get('isUserLoggedIn'),
   };
 };
 
@@ -114,7 +114,7 @@ render() {
         />
         <Header />
         <div className={css(styles.appBody)}>
-          {isLoggedIn ? ( 
+          {isLoggedIn ? (
             <BodySectionWithMarginBottom title="Course list">
               <CourseList listCourses={listCourses} />
             </BodySectionWithMarginBottom>
