@@ -11,7 +11,7 @@ import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import AppContext from './AppContext';
 
-// Function to map state to props
+
 const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.uiReducer.isLoggedIn,
