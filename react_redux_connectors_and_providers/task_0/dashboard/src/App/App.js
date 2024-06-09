@@ -12,7 +12,7 @@ import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBot
 import AppContext from './AppContext';
 
 
-const mapStateToProps = (state) => {
+export const mapStateToProps = (state) => {
   return {
     isLoggedIn: state.ui.get('isUserLoggedIn'),
   };

@@ -1,6 +1,6 @@
 import React from 'react';
 import { shallow, mount } from 'enzyme';
-import App from './App';
+import App, { mapStateToProps } from './App';
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
 import Login from '../Login/Login';
@@ -8,6 +8,7 @@ import Footer from '../Footer/Footer';
 import CourseList from '../CourseList/CourseList';
 import { StyleSheetTestUtils } from 'aphrodite';
 import AppContext from './AppContext';
+import { fromJS } from 'immutable';
 
 describe('App Component', () => {
   let wrapper;
@@ -136,5 +137,21 @@ describe('App Component', () => {
         mockAlert.mockRestore();
       });
     });
+  });
+});
+
+describe('mapStateToProps', () => {
+  it('should return the correct object from the state', () => {
+    const state = fromJS({
+      ui: {
+        isUserLoggedIn: true,
+      },
+    });
+
+    const expectedProps = {
+      isLoggedIn: true,
+    };
+
+    expect(mapStateToProps(state)).toEqual(expectedProps);
   });
 });
