@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
-import { connect } from 'react-redux'; // Import the connect function
 import Header from '../Header/Header';
 import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
@@ -10,13 +9,8 @@ import Notifications from '../Notifications/Notifications';
 import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import AppContext from './AppContext';
-
-
-export const mapStateToProps = (state) => {
-  return {
-    isLoggedIn: state.ui.get('isUserLoggedIn'),
-  };
-};
+import { connect } from 'react-redux';
+import { DISPLAY_NOTIFICATION_DRAWER, HIDE_NOTIFICATION_DRAWER, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from '../actions/uiActionTypes';
 
 class App extends Component {
   constructor(props) {
@@ -33,18 +27,13 @@ class App extends Component {
         { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } }
       ],
       displayDrawer: false,
-      user: {
-        email: '',
-        password: '',
-        isLoggedIn: false,
-      },
     };
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
     this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
     this.handleHideDrawer = this.handleHideDrawer.bind(this);
     this.logOut = this.logOut.bind(this);
-    this.logIn = this.logIn.bind(this); 
+    this.logIn = this.logIn.bind(this);
     this.markNotificationAsRead = this.markNotificationAsRead.bind(this);
   }
 
@@ -63,6 +52,7 @@ class App extends Component {
       this.logOut();
     }
   }
+
   handleDisplayDrawer() {
     this.setState({ displayDrawer: true });
   }
@@ -72,75 +62,68 @@ class App extends Component {
   }
 
   logOut() {
-    this.setState({
-      user: {
-        email: '',
-        password: '',
-        isLoggedIn: false,
-      },
-    });
+    this.props.dispatch({ type: LOGOUT });
   }
+
   logIn(email, password) {
-    this.setState({
-      user: {
-        email,
-        password,
-        isLoggedIn: true,
-      },
-    });
+    this.props.dispatch({ type: LOGIN_SUCCESS, payload: { email, password } });
   }
-  
+
   markNotificationAsRead(id) {
-    this.setState(prevState => ({
-        listNotifications: prevState.listNotifications.filter(notification => notification.id !== id)
+    this.setState((prevState) => ({
+      listNotifications: prevState.listNotifications.filter(notification => notification.id !== id),
     }));
-}
+  }
 
+  render() {
+    const { listCourses, listNotifications, displayDrawer } = this.state;
+    const { isLoggedIn } = this.props;
+    const appStyle = displayDrawer ? styles.appHidden : styles.app;
 
-render() {
-  const { listCourses, listNotifications, displayDrawer, user } = this.state;
-  const appStyle = displayDrawer ? styles.appHidden : styles.app;
-  const { isLoggedIn } = this.props;
-
-  return (
-    <AppContext.Provider value={{ user, logOut: this.logOut }}>
-      <div className={css(appStyle)}>
-        <Notifications 
-          listNotifications={listNotifications} 
-          displayDrawer={displayDrawer} 
-          handleDisplayDrawer={this.handleDisplayDrawer} 
-          handleHideDrawer={this.handleHideDrawer} 
-          markNotificationAsRead={this.markNotificationAsRead}
-        />
-        <Header />
-        <div className={css(styles.appBody)}>
-          {isLoggedIn ? (
-            <BodySectionWithMarginBottom title="Course list">
-              <CourseList listCourses={listCourses} />
-            </BodySectionWithMarginBottom>
-          ) : (
-            <BodySectionWithMarginBottom title="Log in to continue">
-              <Login logIn={this.logIn} />
-            </BodySectionWithMarginBottom>
-          )}
-          <BodySection title="News from the School">
-            <p>Keep up to date with the latest news from our school by checking back here regularly for updates and announcements.</p>
-          </BodySection>
+    return (
+      <AppContext.Provider value={{ user: { isLoggedIn }, logOut: this.logOut }}>
+        <div className={css(appStyle)}>
+          <Notifications
+            listNotifications={listNotifications}
+            displayDrawer={displayDrawer}
+            handleDisplayDrawer={this.handleDisplayDrawer}
+            handleHideDrawer={this.handleHideDrawer}
+            markNotificationAsRead={this.markNotificationAsRead}
+          />
+          <Header />
+          <div className={css(styles.appBody)}>
+            {isLoggedIn ? (
+              <BodySectionWithMarginBottom title="Course list">
+                <CourseList listCourses={listCourses} />
+              </BodySectionWithMarginBottom>
+            ) : (
+              <BodySectionWithMarginBottom title="Log in to continue">
+                <Login logIn={this.logIn} />
+              </BodySectionWithMarginBottom>
+            )}
+            <BodySection title="News from the School">
+              <p>Keep up to date with the latest news from our school by checking back here regularly for updates and announcements.</p>
+            </BodySection>
+          </div>
+          <Footer />
         </div>
-        <Footer />
-      </div>
-    </AppContext.Provider>
-  );
-}
+      </AppContext.Provider>
+    );
+  }
 }
 
 App.propTypes = {
   isLoggedIn: PropTypes.bool,
+  dispatch: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
   isLoggedIn: false,
 };
+
+export const mapStateToProps = (state) => ({
+  isLoggedIn: state.get('isUserLoggedIn'),
+});
 
 const styles = StyleSheet.create({
   app: {

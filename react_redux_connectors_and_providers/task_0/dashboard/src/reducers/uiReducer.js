@@ -1,6 +1,5 @@
-import { createSlice } from '@reduxjs/toolkit';
 import { Map } from 'immutable';
-
+import { DISPLAY_NOTIFICATION_DRAWER, HIDE_NOTIFICATION_DRAWER, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from '../actions/uiActionTypes';
 
 const initialState = Map({
   isNotificationDrawerVisible: false,
@@ -8,37 +7,20 @@ const initialState = Map({
   user: {},
 });
 
-
-const uiSlice = createSlice({
-  name: 'ui',
-  initialState,
-  reducers: {
-    displayNotificationDrawer(state) {
+function uiReducer(state = initialState, action) {
+  switch (action.type) {
+    case DISPLAY_NOTIFICATION_DRAWER:
       return state.set('isNotificationDrawerVisible', true);
-    },
-    hideNotificationDrawer(state) {
+    case HIDE_NOTIFICATION_DRAWER:
       return state.set('isNotificationDrawerVisible', false);
-    },
-    loginSuccess(state, action) {
+    case LOGIN_SUCCESS:
       return state.set('isUserLoggedIn', true).set('user', action.payload);
-    },
-    loginFailure(state) {
+    case LOGIN_FAILURE:
+    case LOGOUT:
       return state.set('isUserLoggedIn', false).set('user', {});
-    },
-    logout(state) {
-      return state.set('isUserLoggedIn', false).set('user', {});
-    },
-  },
-});
+    default:
+      return state;
+  }
+}
 
-
-export const {
-  displayNotificationDrawer,
-  hideNotificationDrawer,
-  loginSuccess,
-  loginFailure,
-  logout,
-} = uiSlice.actions;
-
-
-export default uiSlice.reducer;
+export default uiReducer;

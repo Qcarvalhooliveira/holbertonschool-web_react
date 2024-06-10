@@ -1,5 +1,5 @@
 import { normalize, schema } from 'normalizr';
-import notificationsData from '../../../notifications.json';
+import notificationsData from '../../notifications.json';
 import { notificationsNormalizer } from '../schema/notifications';
 
 const user = new schema.Entity('users');

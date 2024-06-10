@@ -1,26 +1,18 @@
 import React from 'react';
-import ReactDOM from 'react-dom/client';
+import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
-import { configureStore } from '@reduxjs/toolkit';
+import { createStore } from 'redux';
 import App from './App/App';
 import reportWebVitals from './reportWebVitals';
 import uiReducer from './reducers/uiReducer';
 
+const store = createStore(uiReducer);
 
-const store = configureStore({
-  reducer: {
-    ui: uiReducer,
-  },
-});
-
-
-const container = document.getElementById('root');
-const root = ReactDOM.createRoot(container);
-
-root.render(
+ReactDOM.render(
   <Provider store={store}>
     <App />
-  </Provider>
+  </Provider>,
+  document.getElementById('root')
 );
 
 reportWebVitals();
