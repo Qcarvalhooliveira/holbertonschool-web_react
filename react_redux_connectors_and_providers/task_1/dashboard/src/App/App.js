@@ -10,7 +10,7 @@ import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import AppContext from './AppContext';
 import { connect } from 'react-redux';
-import { DISPLAY_NOTIFICATION_DRAWER, HIDE_NOTIFICATION_DRAWER, LOGIN_SUCCESS, LOGOUT } from '../actions/uiActionTypes';
+import { DISPLAY_NOTIFICATION_DRAWER, HIDE_NOTIFICATION_DRAWER, LOGIN_SUCCESS, LOGIN_FAILURE, LOGOUT } from '../actions/uiActionTypes';
 
 class App extends Component {
   constructor(props) {
@@ -26,6 +26,7 @@ class App extends Component {
         { id: 2, type: 'urgent', value: 'New resume available' },
         { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } }
       ],
+      displayDrawer: false,
     };
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
@@ -53,11 +54,11 @@ class App extends Component {
   }
 
   handleDisplayDrawer() {
-    this.props.dispatch({ type: DISPLAY_NOTIFICATION_DRAWER });
+    this.setState({ displayDrawer: true });
   }
 
   handleHideDrawer() {
-    this.props.dispatch({ type: HIDE_NOTIFICATION_DRAWER });
+    this.setState({ displayDrawer: false });
   }
 
   logOut() {
@@ -75,8 +76,8 @@ class App extends Component {
   }
 
   render() {
-    const { listCourses, listNotifications } = this.state;
-    const { isLoggedIn, displayDrawer } = this.props;
+    const { listCourses, listNotifications, displayDrawer } = this.state;
+    const { isLoggedIn } = this.props;
     const appStyle = displayDrawer ? styles.appHidden : styles.app;
 
     return (
@@ -113,18 +114,15 @@ class App extends Component {
 
 App.propTypes = {
   isLoggedIn: PropTypes.bool,
-  displayDrawer: PropTypes.bool,
   dispatch: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
   isLoggedIn: false,
-  displayDrawer: false,
 };
 
 export const mapStateToProps = (state) => ({
   isLoggedIn: state.get('isUserLoggedIn'),
-  displayDrawer: state.get('isNotificationDrawerVisible'),
 });
 
 const styles = StyleSheet.create({
