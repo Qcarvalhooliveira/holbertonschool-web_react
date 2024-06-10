@@ -10,7 +10,8 @@ import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import AppContext from './AppContext';
 import { connect } from 'react-redux';
-import { DISPLAY_NOTIFICATION_DRAWER, HIDE_NOTIFICATION_DRAWER, LOGIN_SUCCESS, LOGOUT } from '../actions/uiActionTypes';
+import { displayNotificationDrawer, hideNotificationDrawer } from '../actions/uiActionCreators'; // Importando os action creators
+import { LOGIN_SUCCESS, LOGOUT } from '../actions/uiActionTypes';
 
 class App extends Component {
   constructor(props) {
@@ -53,11 +54,11 @@ class App extends Component {
   }
 
   handleDisplayDrawer() {
-    this.props.dispatch({ type: DISPLAY_NOTIFICATION_DRAWER });
+    this.props.displayNotificationDrawer();
   }
 
   handleHideDrawer() {
-    this.props.dispatch({ type: HIDE_NOTIFICATION_DRAWER });
+    this.props.hideNotificationDrawer();
   }
 
   logOut() {
@@ -114,6 +115,8 @@ class App extends Component {
 App.propTypes = {
   isLoggedIn: PropTypes.bool,
   displayDrawer: PropTypes.bool,
+  displayNotificationDrawer: PropTypes.func.isRequired,
+  hideNotificationDrawer: PropTypes.func.isRequired,
   dispatch: PropTypes.func.isRequired,
 };
 
@@ -126,6 +129,11 @@ export const mapStateToProps = (state) => ({
   isLoggedIn: state.get('isUserLoggedIn'),
   displayDrawer: state.get('isNotificationDrawerVisible'),
 });
+
+const mapDispatchToProps = {
+  displayNotificationDrawer,
+  hideNotificationDrawer,
+};
 
 const styles = StyleSheet.create({
   app: {
@@ -145,4 +153,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps, mapDispatchToProps)(App);
