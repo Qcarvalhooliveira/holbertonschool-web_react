@@ -10,7 +10,7 @@ import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import AppContext from './AppContext';
 import { connect } from 'react-redux';
-import { displayNotificationDrawer, hideNotificationDrawer } from '../actions/uiActionCreators'; // Importando os action creators
+import { displayNotificationDrawer, hideNotificationDrawer } from '../actions/uiActionCreators';
 import { LOGIN_SUCCESS, LOGOUT } from '../actions/uiActionTypes';
 
 class App extends Component {
@@ -30,8 +30,6 @@ class App extends Component {
     };
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.handleDisplayDrawer = this.handleDisplayDrawer.bind(this);
-    this.handleHideDrawer = this.handleHideDrawer.bind(this);
     this.logOut = this.logOut.bind(this);
     this.logIn = this.logIn.bind(this);
     this.markNotificationAsRead = this.markNotificationAsRead.bind(this);
@@ -53,14 +51,6 @@ class App extends Component {
     }
   }
 
-  handleDisplayDrawer() {
-    this.props.displayNotificationDrawer();
-  }
-
-  handleHideDrawer() {
-    this.props.hideNotificationDrawer();
-  }
-
   logOut() {
     this.props.dispatch({ type: LOGOUT });
   }
@@ -77,7 +67,7 @@ class App extends Component {
 
   render() {
     const { listCourses, listNotifications } = this.state;
-    const { isLoggedIn, displayDrawer } = this.props;
+    const { isLoggedIn, displayDrawer, displayNotificationDrawer, hideNotificationDrawer } = this.props;
     const appStyle = displayDrawer ? styles.appHidden : styles.app;
 
     return (
@@ -86,8 +76,8 @@ class App extends Component {
           <Notifications
             listNotifications={listNotifications}
             displayDrawer={displayDrawer}
-            handleDisplayDrawer={this.handleDisplayDrawer}
-            handleHideDrawer={this.handleHideDrawer}
+            handleDisplayDrawer={displayNotificationDrawer}
+            handleHideDrawer={hideNotificationDrawer}
             markNotificationAsRead={this.markNotificationAsRead}
           />
           <Header />
