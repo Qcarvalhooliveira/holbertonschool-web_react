@@ -1,30 +1,37 @@
-import React, { useContext } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
 import { getFullYear, getFooterCopy } from '../utils/utils';
-import AppContext from '../App/AppContext';
+import { connect } from 'react-redux';
 
-function Footer() {
-    const { user } = useContext(AppContext);
-
-    return (
-        <footer className={css(styles.footer)}>
-            <em>
-                <p>{`© Copyright ${getFullYear()} - ${getFooterCopy(true)}`}</p>
-                {user.isLoggedIn && <p><a href="/contact">Contact us</a></p>}
-            </em>
-        </footer>
-    );
+function Footer({ isLoggedIn }) {
+  return (
+    <footer className={css(styles.footer)}>
+      <em>
+        <p>{`© Copyright ${getFullYear()} - ${getFooterCopy(true)}`}</p>
+        {isLoggedIn && <p><a href="/contact">Contact us</a></p>}
+      </em>
+    </footer>
+  );
 }
 
+Footer.propTypes = {
+  isLoggedIn: PropTypes.bool.isRequired,
+};
+
 const styles = StyleSheet.create({
-    footer: {
-        display: 'flex',
-        alignItems: 'center',
-        justifyContent: 'center',
-        padding: '10px',
-        borderTop: '4px solid #e0003c',
-        marginTop: '400px',
-    }
+  footer: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '10px',
+    borderTop: '4px solid #e0003c',
+    marginTop: '400px',
+  },
 });
 
-export default Footer;
+const mapStateToProps = (state) => ({
+  isLoggedIn: state.get('isUserLoggedIn'),
+});
+
+export default connect(mapStateToProps)(Footer);
