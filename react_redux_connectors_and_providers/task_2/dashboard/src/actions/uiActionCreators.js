@@ -18,8 +18,9 @@ export const hideNotificationDrawer = () => ({
   type: HIDE_NOTIFICATION_DRAWER,
 });
 
-export const loginSuccess = () => ({
+export const loginSuccess = (user) => ({
   type: LOGIN_SUCCESS,
+  payload: user,
 });
 
 export const loginFailure = () => ({
@@ -33,7 +34,9 @@ export const loginRequest = (email, password) => {
     return fetch('/login-success.json')
       .then((response) => {
         if (response.ok) {
-          dispatch(loginSuccess());
+          response.json().then((data) => {
+            dispatch(loginSuccess({ email }));
+          });
         } else {
           dispatch(loginFailure());
         }
@@ -43,8 +46,3 @@ export const loginRequest = (email, password) => {
       });
   };
 };
-
-export const boundLogin = (email, password) => (dispatch) => dispatch(login(email, password));
-export const boundLogout = () => (dispatch) => dispatch(logout());
-export const boundDisplayNotificationDrawer = () => (dispatch) => dispatch(displayNotificationDrawer());
-export const boundHideNotificationDrawer = () => (dispatch) => dispatch(hideNotificationDrawer());

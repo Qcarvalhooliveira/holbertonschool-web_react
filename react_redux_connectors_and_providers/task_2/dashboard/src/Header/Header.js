@@ -1,27 +1,33 @@
-import React, { Component } from 'react';
+import React from 'react';
+import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
+import { connect } from 'react-redux';
 import logo from '../assets/Holberton_Logo.jpg';
-import AppContext from '../App/AppContext';
+import { logout } from '../actions/uiActionCreators';
 
-class Header extends Component {
-  static contextType = AppContext;
-  render () {
-    const { user, logOut } = this.context; 
-
-    return (
-      <header className={css(styles.header)}>
-        <div className={css(styles.logoContainer)}>
-          <img src={logo} className={css(styles.logo)} alt="logo" />
-          <h1 className={css(styles.headerTitle)}>School dashboard</h1>
+function Header({ user, logout }) {
+ 
+  return (
+    <header className={css(styles.header)}>
+      <div className={css(styles.logoContainer)}>
+        <img src={logo} className={css(styles.logo)} alt="logo" />
+        <h1 className={css(styles.headerTitle)}>School dashboard</h1>
+      </div>
+      {user.isLoggedIn && (
+        <div id="logoutSection" className={css(styles.logoutSection)}>
+          <span>Welcome {user.email} (<a href="#" onClick={logout}>logout</a>)</span>
         </div>
-        {user.isLoggedIn && (
-          <div id="logoutSection" className={css(styles.logoutSection)}>
-            <span>Welcome {user.email} (<a href="#" onClick={logOut}>logout</a>)</span>
-          </div>
-        )}
-      </header>
-    );
-  }
+      )}
+    </header>
+  );
+}
+
+Header.propTypes = {
+  user: PropTypes.shape({
+    isLoggedIn: PropTypes.bool,
+    email: PropTypes.string,
+  }).isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 const styles = StyleSheet.create({
@@ -48,7 +54,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     color: '#e0003c',
   },
-  
 });
 
-export default Header;
+const mapStateToProps = (state) => ({
+  user: state.get('user') || { isLoggedIn: false, email: '' },
+});
+
+const mapDispatchToProps = {
+  logout,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Header);
