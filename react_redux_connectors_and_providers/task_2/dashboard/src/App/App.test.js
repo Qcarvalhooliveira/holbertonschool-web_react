@@ -1,16 +1,14 @@
 import React from 'react';
-import { mount } from 'enzyme';
-import { Provider } from 'react-redux';
+import { shallow } from 'enzyme';
 import configureStore from 'redux-mock-store';
 import { fromJS } from 'immutable';
-import App, { mapStateToProps } from './App';
+import { App, mapStateToProps } from './App';
 import Notifications from '../Notifications/Notifications';
 import Header from '../Header/Header';
 import Login from '../Login/Login';
 import Footer from '../Footer/Footer';
 import CourseList from '../CourseList/CourseList';
 import { StyleSheetTestUtils } from 'aphrodite';
-import AppContext, { defaultUser } from './AppContext';
 
 describe('App Component', () => {
   let wrapper;
@@ -18,7 +16,6 @@ describe('App Component', () => {
   const initialState = fromJS({
     isUserLoggedIn: false,
     isNotificationDrawerVisible: false,
-    user: defaultUser,
   });
   let store;
 
@@ -32,10 +29,15 @@ describe('App Component', () => {
 
   beforeEach(() => {
     store = mockStore(initialState);
-    wrapper = mount(
-      <Provider store={store}>
-        <App />
-      </Provider>
+    wrapper = shallow(
+      <App
+        isLoggedIn={false}
+        displayDrawer={false}
+        displayNotificationDrawer={jest.fn()}
+        hideNotificationDrawer={jest.fn()}
+        loginRequest={jest.fn()}
+        logout={jest.fn()}
+      />
     );
   });
 
@@ -60,32 +62,22 @@ describe('App Component', () => {
       expect(wrapper.find(CourseList).exists()).toBe(false);
     });
 
-    it('should update the user state correctly on logOut', () => {
-      const appInstance = wrapper.find('App').instance();
-      appInstance.logOut();
-      wrapper.update();
-      expect(store.getActions()).toContainEqual({ type: 'LOGOUT' });
-    });
-
-    it('should update the user state correctly on logIn', () => {
-      const appInstance = wrapper.find('App').instance();
-      appInstance.logIn('test@example.com', 'password');
-      wrapper.update();
-      expect(store.getActions()).toContainEqual({ type: 'LOGIN_SUCCESS', payload: { email: 'test@example.com', password: 'password' } });
-    });
-
     describe('when user is logged in', () => {
       beforeEach(() => {
         const loggedInState = fromJS({
           isUserLoggedIn: true,
           isNotificationDrawerVisible: false,
-          user: { email: 'test@example.com', isLoggedIn: true }
         });
         store = mockStore(loggedInState);
-        wrapper = mount(
-          <Provider store={store}>
-            <App />
-          </Provider>
+        wrapper = shallow(
+          <App
+            isLoggedIn={true}
+            displayDrawer={false}
+            displayNotificationDrawer={jest.fn()}
+            hideNotificationDrawer={jest.fn()}
+            loginRequest={jest.fn()}
+            logout={jest.fn()}
+          />
         );
       });
 
@@ -105,15 +97,22 @@ describe('App Component', () => {
         { id: 1, type: 'default', value: 'New course available' },
         { id: 2, type: 'urgent', value: 'New resume available' }
       ];
-      const appInstance = wrapper.find('App').instance();
-      appInstance.setState({ listNotifications: initialNotifications });
-      expect(appInstance.state.listNotifications.length).toBe(2);
+      const wrapperInstance = shallow(
+        <App
+          isLoggedIn={false}
+          displayDrawer={false}
+          displayNotificationDrawer={jest.fn()}
+          hideNotificationDrawer={jest.fn()}
+          loginRequest={jest.fn()}
+          logout={jest.fn()}
+        />
+      ).instance();
+      wrapperInstance.setState({ listNotifications: initialNotifications });
+      expect(wrapperInstance.state.listNotifications.length).toBe(2);
 
-      appInstance.markNotificationAsRead(1);
-      wrapper.update();
-
-      expect(appInstance.state.listNotifications.length).toBe(1);
-      expect(appInstance.state.listNotifications[0].id).toBe(2);
+      wrapperInstance.markNotificationAsRead(1);
+      expect(wrapperInstance.state.listNotifications.length).toBe(1);
+      expect(wrapperInstance.state.listNotifications[0].id).toBe(2);
     });
   });
 
@@ -122,13 +121,16 @@ describe('App Component', () => {
       const mockLogOut = jest.fn();
       const mockAlert = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
-      const wrapper = mount(
-        <Provider store={store}>
-          <AppContext.Provider value={{ user: { isLoggedIn: true, email: 'test@example.com' }, logOut: mockLogOut }}>
-            <App />
-          </AppContext.Provider>
-        </Provider>
-      );
+      const wrapperInstance = shallow(
+        <App
+          isLoggedIn={true}
+          displayDrawer={false}
+          displayNotificationDrawer={jest.fn()}
+          hideNotificationDrawer={jest.fn()}
+          loginRequest={jest.fn()}
+          logout={mockLogOut}
+        />
+      ).instance();
 
       const event = new KeyboardEvent('keydown', {
         key: 'h',

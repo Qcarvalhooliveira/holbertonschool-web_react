@@ -33,5 +33,5 @@ const styles = StyleSheet.create({
 const mapStateToProps = (state) => ({
   isLoggedIn: state.get('isUserLoggedIn'),
 });
-
+export {Footer}
 export default connect(mapStateToProps)(Footer);

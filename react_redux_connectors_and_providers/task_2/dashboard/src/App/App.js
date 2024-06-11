@@ -134,5 +134,5 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
-
+export { App }
 export default connect(mapStateToProps, mapDispatchToProps)(App);
