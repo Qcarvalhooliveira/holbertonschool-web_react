@@ -53,14 +53,10 @@ describe('App Component', () => {
 
   describe('User Authentication', () => {
     it('should contain Login component when user is not logged in', () => {
-      wrapper.setProps({ isLoggedIn: false });
-      wrapper.update();
       expect(wrapper.find(Login).exists()).toBe(true);
     });
 
     it('should not display CourseList when user is not logged in', () => {
-      wrapper.setProps({ isLoggedIn: false });
-      wrapper.update();
       expect(wrapper.find(CourseList).exists()).toBe(false);
     });
 
@@ -80,11 +76,12 @@ describe('App Component', () => {
 
     describe('when user is logged in', () => {
       beforeEach(() => {
-        store = mockStore(fromJS({
+        const loggedInState = fromJS({
           isUserLoggedIn: true,
           isNotificationDrawerVisible: false,
           user: { email: 'test@example.com', isLoggedIn: true }
-        }));
+        });
+        store = mockStore(loggedInState);
         wrapper = mount(
           <Provider store={store}>
             <App />
@@ -120,52 +117,42 @@ describe('App Component', () => {
     });
   });
 
-  describe('Interaction', () => {
-    it('should handle displayDrawer state changes correctly', () => {
-      const appInstance = wrapper.find('App').instance();
-      appInstance.handleDisplayDrawer();
-      wrapper.update();
-      expect(appInstance.state.displayDrawer).toBe(true);
-      appInstance.handleHideDrawer();
-      wrapper.update();
-      expect(appInstance.state.displayDrawer).toBe(false);
-    });
+  describe('Keyboard events', () => {
+    it('calls logOut and updates state when "control" and "h" keys are pressed', () => {
+      const mockLogOut = jest.fn();
+      const mockAlert = jest.spyOn(window, 'alert').mockImplementation(() => {});
 
-    describe('Keyboard events', () => {
-      it('calls logOut and updates state when "control" and "h" keys are pressed', () => {
-        const mockLogOut = jest.fn();
-        const mockAlert = jest.spyOn(window, 'alert').mockImplementation(() => {});
+      const wrapper = mount(
+        <Provider store={store}>
+          <AppContext.Provider value={{ user: { isLoggedIn: true, email: 'test@example.com' }, logOut: mockLogOut }}>
+            <App />
+          </AppContext.Provider>
+        </Provider>
+      );
 
-        const wrapper = mount(
-          <Provider store={store}>
-            <AppContext.Provider value={{ user: { isLoggedIn: true, email: 'test@example.com' }, logOut: mockLogOut }}>
-              <App />
-            </AppContext.Provider>
-          </Provider>
-        );
-
-        const event = new KeyboardEvent('keydown', {
-          key: 'h',
-          ctrlKey: true,
-        });
-        document.dispatchEvent(event);
-
-        expect(mockAlert).toHaveBeenCalledWith('Logging you out');
-        expect(mockLogOut).toHaveBeenCalled();
-        mockAlert.mockRestore();
+      const event = new KeyboardEvent('keydown', {
+        key: 'h',
+        ctrlKey: true,
       });
+      document.dispatchEvent(event);
+
+      expect(mockAlert).toHaveBeenCalledWith('Logging you out');
+      expect(mockLogOut).toHaveBeenCalled();
+      mockAlert.mockRestore();
     });
   });
 
   describe('mapStateToProps', () => {
     it('should return the correct isLoggedIn state', () => {
-      const initialState = fromJS({
-        isUserLoggedIn: true
+      const state = fromJS({
+        isUserLoggedIn: true,
+        isNotificationDrawerVisible: false,
       });
       const expectedProps = {
-        isLoggedIn: true
+        isLoggedIn: true,
+        displayDrawer: false,
       };
-      expect(mapStateToProps(initialState)).toEqual(expectedProps);
+      expect(mapStateToProps(state)).toEqual(expectedProps);
     });
   });
 });
