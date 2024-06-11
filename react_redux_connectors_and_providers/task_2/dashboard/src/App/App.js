@@ -10,8 +10,7 @@ import BodySection from '../BodySection/BodySection';
 import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBottom';
 import AppContext from './AppContext';
 import { connect } from 'react-redux';
-import { LOGIN_SUCCESS, LOGOUT } from '../actions/uiActionTypes';
-import { displayNotificationDrawer, hideNotificationDrawer } from '../actions/uiActionCreators';
+import { displayNotificationDrawer, hideNotificationDrawer, loginRequest, logout } from '../actions/uiActionCreators';
 
 class App extends Component {
   constructor(props) {
@@ -30,8 +29,6 @@ class App extends Component {
     };
 
     this.handleKeyDown = this.handleKeyDown.bind(this);
-    this.logOut = this.logOut.bind(this);
-    this.logIn = this.logIn.bind(this);
     this.markNotificationAsRead = this.markNotificationAsRead.bind(this);
   }
 
@@ -47,16 +44,8 @@ class App extends Component {
     if (event.ctrlKey && event.key === 'h') {
       event.preventDefault();
       alert('Logging you out');
-      this.logOut();
+      this.props.logout();
     }
-  }
-
-  logOut() {
-    this.props.logOut();
-  }
-
-  logIn(email, password) {
-    this.props.logIn(email, password);
   }
 
   markNotificationAsRead(id) {
@@ -67,11 +56,11 @@ class App extends Component {
 
   render() {
     const { listCourses, listNotifications } = this.state;
-    const { isLoggedIn, displayDrawer, displayNotificationDrawer, hideNotificationDrawer } = this.props;
+    const { isLoggedIn, displayDrawer, displayNotificationDrawer, hideNotificationDrawer, loginRequest, logout } = this.props;
     const appStyle = displayDrawer ? styles.appHidden : styles.app;
 
     return (
-      <AppContext.Provider value={{ user: { isLoggedIn }, logOut: this.logOut }}>
+      <AppContext.Provider value={{ user: { isLoggedIn }, logOut: logout }}>
         <div className={css(appStyle)}>
           <Notifications
             listNotifications={listNotifications}
@@ -88,7 +77,7 @@ class App extends Component {
               </BodySectionWithMarginBottom>
             ) : (
               <BodySectionWithMarginBottom title="Log in to continue">
-                <Login logIn={this.logIn} />
+                <Login logIn={loginRequest} />
               </BodySectionWithMarginBottom>
             )}
             <BodySection title="News from the School">
@@ -107,8 +96,8 @@ App.propTypes = {
   displayDrawer: PropTypes.bool.isRequired,
   displayNotificationDrawer: PropTypes.func.isRequired,
   hideNotificationDrawer: PropTypes.func.isRequired,
-  logIn: PropTypes.func.isRequired,
-  logOut: PropTypes.func.isRequired,
+  loginRequest: PropTypes.func.isRequired,
+  logout: PropTypes.func.isRequired,
 };
 
 App.defaultProps = {
@@ -124,8 +113,8 @@ export const mapStateToProps = (state) => ({
 const mapDispatchToProps = {
   displayNotificationDrawer,
   hideNotificationDrawer,
-  logIn: (email, password) => ({ type: LOGIN_SUCCESS, payload: { email, password } }),
-  logOut: () => ({ type: LOGOUT }),
+  loginRequest,
+  logout,
 };
 
 const styles = StyleSheet.create({
