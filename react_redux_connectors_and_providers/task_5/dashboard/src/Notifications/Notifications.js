@@ -1,7 +1,10 @@
 import React, { PureComponent } from 'react';
 import PropTypes from 'prop-types';
+import { connect } from 'react-redux';
 import { StyleSheet, css } from 'aphrodite';
 import NotificationItem from './NotificationItem';
+import { markAsRead, fetchNotifications } from '../actions/notificationActionCreators';
+import { Map } from 'immutable';
 
 export class Notifications extends PureComponent {
   constructor(props) {
@@ -9,6 +12,10 @@ export class Notifications extends PureComponent {
     this.state = {
       isDrawerOpen: this.props.displayDrawer,
     };
+  }
+
+  componentDidMount() {
+    this.props.fetchNotifications();
   }
 
   componentDidUpdate(prevProps) {
@@ -36,7 +43,7 @@ export class Notifications extends PureComponent {
               <button className={css(styles.closeButton)} onClick={handleHideDrawer}>X</button>
             </div>
             <ul className={css(styles.notificationsUl)}>
-              {listNotifications.map((notification) => (
+              {listNotifications && listNotifications.map((notification) => (
                 <NotificationItem
                   key={notification.id}
                   type={notification.type}
@@ -56,24 +63,15 @@ export class Notifications extends PureComponent {
 
 Notifications.propTypes = {
   displayDrawer: PropTypes.bool,
-  listNotifications: PropTypes.arrayOf(
-    PropTypes.shape({
-      id: PropTypes.number.isRequired,
-      type: PropTypes.string,
-      value: PropTypes.string,
-      html: PropTypes.shape({
-        __html: PropTypes.string,
-      }),
-    })
-  ).isRequired,
+  listNotifications: PropTypes.instanceOf(Map).isRequired,
   handleDisplayDrawer: PropTypes.func.isRequired,
   handleHideDrawer: PropTypes.func.isRequired,
-  markNotificationAsRead: PropTypes.func,
+  markNotificationAsRead: PropTypes.func.isRequired,
+  fetchNotifications: PropTypes.func.isRequired,
 };
 
 Notifications.defaultProps = {
   displayDrawer: false,
-  markNotificationAsRead: () => {},
 };
 
 const bounce = {
@@ -176,4 +174,13 @@ const styles = StyleSheet.create({
   },
 });
 
-export default Notifications;
+const mapStateToProps = (state) => ({
+  listNotifications: state.getIn(['notifications', 'notifications'], Map()),
+  displayDrawer: state.getIn(['ui', 'isNotificationDrawerVisible']),
+});
+
+const mapDispatchToProps = {
+  fetchNotifications,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(Notifications);

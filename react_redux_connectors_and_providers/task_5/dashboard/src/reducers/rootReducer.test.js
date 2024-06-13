@@ -8,6 +8,7 @@ describe('rootReducer', () => {
       courses: Map(),
       notifications: Map({
         filter: 'DEFAULT',
+        "isLoading": false,
         notifications: Map(),
       }),
       ui: Map({
