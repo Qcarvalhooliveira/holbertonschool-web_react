@@ -3,12 +3,12 @@ import ReactDOM from 'react-dom';
 import { Provider } from 'react-redux';
 import { createStore, applyMiddleware } from 'redux';
 import {thunk} from 'redux-thunk';
-import { composeWithDevTools } from 'redux-devtools-extension'; 
+import { composeWithDevTools } from 'redux-devtools-extension';
 import App from './App/App';
 import reportWebVitals from './reportWebVitals';
-import uiReducer from './reducers/uiReducer';
+import rootReducer from './reducers/rootReducer';
 
-const store = createStore(uiReducer, composeWithDevTools(applyMiddleware(thunk)));
+const store = createStore(rootReducer, composeWithDevTools(applyMiddleware(thunk)));
 
 ReactDOM.render(
   <Provider store={store}>

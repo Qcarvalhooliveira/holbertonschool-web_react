@@ -6,16 +6,15 @@ import logo from '../assets/Holberton_Logo.jpg';
 import { logout } from '../actions/uiActionCreators';
 
 function Header({ user, logout }) {
- 
   return (
     <header className={css(styles.header)}>
       <div className={css(styles.logoContainer)}>
         <img src={logo} className={css(styles.logo)} alt="logo" />
         <h1 className={css(styles.headerTitle)}>School dashboard</h1>
       </div>
-      {user.isLoggedIn && (
+      {user.get('isLoggedIn') && (
         <div id="logoutSection" className={css(styles.logoutSection)}>
-          <span>Welcome {user.email} (<a href="#" onClick={logout}>logout</a>)</span>
+          <span>Welcome {user.getIn(['user', 'email'])} (<a href="#" onClick={logout}>logout</a>)</span>
         </div>
       )}
     </header>
@@ -23,10 +22,7 @@ function Header({ user, logout }) {
 }
 
 Header.propTypes = {
-  user: PropTypes.shape({
-    isLoggedIn: PropTypes.bool,
-    email: PropTypes.string,
-  }).isRequired,
+  user: PropTypes.object.isRequired, 
   logout: PropTypes.func.isRequired,
 };
 
@@ -57,7 +53,7 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  user: state.get('user') || { isLoggedIn: false, email: '' },
+  user: state.getIn(['ui', 'user']),
 });
 
 const mapDispatchToProps = {

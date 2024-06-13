@@ -1,3 +1,5 @@
+// App.js
+
 import React, { Component } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
@@ -11,6 +13,7 @@ import BodySectionWithMarginBottom from '../BodySection/BodySectionWithMarginBot
 import AppContext from './AppContext';
 import { connect } from 'react-redux';
 import { displayNotificationDrawer, hideNotificationDrawer, loginRequest, logout } from '../actions/uiActionCreators';
+import { Map } from 'immutable'; // Importe Map do Immutable.js
 
 class App extends Component {
   constructor(props) {
@@ -105,9 +108,10 @@ App.defaultProps = {
   displayDrawer: false,
 };
 
+// Ajuste mapStateToProps para acessar corretamente o estado imutável
 export const mapStateToProps = (state) => ({
-  isLoggedIn: state.get('isUserLoggedIn'),
-  displayDrawer: state.get('isNotificationDrawerVisible'),
+  isLoggedIn: state.getIn(['ui', 'isUserLoggedIn']), // Acessa usando getIn do Immutable.js
+  displayDrawer: state.getIn(['ui', 'isNotificationDrawerVisible']), // Acessa usando getIn do Immutable.js
 });
 
 const mapDispatchToProps = {
@@ -134,5 +138,6 @@ const styles = StyleSheet.create({
     width: '80%',
   },
 });
-export { App }
+
+export { App };
 export default connect(mapStateToProps, mapDispatchToProps)(App);

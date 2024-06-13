@@ -31,7 +31,8 @@ const styles = StyleSheet.create({
 });
 
 const mapStateToProps = (state) => ({
-  isLoggedIn: state.get('isUserLoggedIn'),
+  isLoggedIn: state.getIn(['ui', 'isUserLoggedIn']),
 });
-export {Footer}
+
+export { Footer };
 export default connect(mapStateToProps)(Footer);
