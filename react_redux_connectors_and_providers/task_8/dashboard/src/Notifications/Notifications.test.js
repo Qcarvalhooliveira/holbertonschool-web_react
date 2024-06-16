@@ -9,6 +9,7 @@ describe('Notifications', () => {
   const handleHideDrawerMock = jest.fn();
   const fetchNotificationsMock = jest.fn();
   const markAsReadMock = jest.fn();
+  const setNotificationFilterMock = jest.fn();
 
   beforeAll(() => {
     StyleSheetTestUtils.suppressStyleInjection();
@@ -31,6 +32,7 @@ describe('Notifications', () => {
         handleHideDrawer={handleHideDrawerMock}
         fetchNotifications={fetchNotificationsMock}
         markAsRead={markAsReadMock}
+        setNotificationFilter={setNotificationFilterMock}
       />
     );
     expect(wrapper.find('[data-testid="menuItem"]').text()).toContain('Your notifications');
@@ -46,6 +48,7 @@ describe('Notifications', () => {
         handleHideDrawer={handleHideDrawerMock}
         fetchNotifications={fetchNotificationsMock}
         markAsRead={markAsReadMock}
+        setNotificationFilter={setNotificationFilterMock}
       />
     );
     expect(wrapper.find('[data-testid="notifications"]').exists()).toBe(true);
@@ -67,6 +70,7 @@ describe('Notifications', () => {
           handleHideDrawer={handleHideDrawerMock}
           fetchNotifications={fetchNotificationsMock}
           markAsRead={markAsReadMock}
+          setNotificationFilter={setNotificationFilterMock}
         />
       );
       expect(wrapper.find(NotificationItem).length).toBe(notifications.length);
@@ -81,6 +85,7 @@ describe('Notifications', () => {
           handleHideDrawer={handleHideDrawerMock}
           fetchNotifications={fetchNotificationsMock}
           markAsRead={markAsReadMock}
+          setNotificationFilter={setNotificationFilterMock}
         />
       );
       wrapper.find('[data-testid="menuItem"]').simulate('click');
@@ -96,10 +101,43 @@ describe('Notifications', () => {
           handleHideDrawer={handleHideDrawerMock}
           fetchNotifications={fetchNotificationsMock}
           markAsRead={markAsReadMock}
+          setNotificationFilter={setNotificationFilterMock}
         />
       );
-      wrapper.find('button').simulate('click');
+      wrapper.find('button').at(0).simulate('click'); // Assumindo que o botão de fechar é o primeiro botão
       expect(handleHideDrawerMock).toHaveBeenCalled();
+    });
+
+    it('calls setNotificationFilter with URGENT when the first filter button is clicked', () => {
+      const wrapper = shallow(
+        <Notifications
+          displayDrawer={true}
+          unreadNotifications={[]}
+          handleDisplayDrawer={handleDisplayDrawerMock}
+          handleHideDrawer={handleHideDrawerMock}
+          fetchNotifications={fetchNotificationsMock}
+          markAsRead={markAsReadMock}
+          setNotificationFilter={setNotificationFilterMock}
+        />
+      );
+      wrapper.find('button').at(1).simulate('click'); // Assumindo que o botão URGENT é o segundo botão
+      expect(setNotificationFilterMock).toHaveBeenCalledWith('URGENT');
+    });
+
+    it('calls setNotificationFilter with DEFAULT when the second filter button is clicked', () => {
+      const wrapper = shallow(
+        <Notifications
+          displayDrawer={true}
+          unreadNotifications={[]}
+          handleDisplayDrawer={handleDisplayDrawerMock}
+          handleHideDrawer={handleHideDrawerMock}
+          fetchNotifications={fetchNotificationsMock}
+          markAsRead={markAsReadMock}
+          setNotificationFilter={setNotificationFilterMock}
+        />
+      );
+      wrapper.find('button').at(2).simulate('click'); // Assumindo que o botão DEFAULT é o terceiro botão
+      expect(setNotificationFilterMock).toHaveBeenCalledWith('DEFAULT');
     });
   });
 
@@ -112,6 +150,7 @@ describe('Notifications', () => {
         handleHideDrawer={handleHideDrawerMock}
         fetchNotifications={fetchNotificationsMock}
         markAsRead={markAsReadMock}
+        setNotificationFilter={setNotificationFilterMock}
       />
     );
     expect(fetchNotificationsMock).toHaveBeenCalled();
