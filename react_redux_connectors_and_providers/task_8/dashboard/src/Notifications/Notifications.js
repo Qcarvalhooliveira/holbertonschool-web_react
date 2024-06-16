@@ -1,69 +1,49 @@
-import React, { PureComponent } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
-import { connect } from 'react-redux';
 import { StyleSheet, css } from 'aphrodite';
 import NotificationItem from './NotificationItem';
-import { fetchNotifications, markAsRead, setNotificationFilter } from '../actions/notificationActionCreators';
-import { getUnreadNotificationsByType } from '../selectors/notificationSelector';
 
-export class Notifications extends PureComponent {
-  constructor(props) {
-    super(props);
-    this.state = {
-      isDrawerOpen: this.props.displayDrawer,
-    };
-  }
+const Notifications = ({ displayDrawer, unreadNotifications, handleDisplayDrawer, handleHideDrawer, markAsRead, setNotificationFilter }) => {
+  const [isDrawerOpen, setDrawerOpen] = useState(displayDrawer);
 
-  componentDidMount() {
-    this.props.fetchNotifications();
-  }
+  useEffect(() => {
+    setDrawerOpen(displayDrawer);
+  }, [displayDrawer]);
 
-  componentDidUpdate(prevProps) {
-    if (prevProps.displayDrawer !== this.props.displayDrawer) {
-      this.setState({ isDrawerOpen: this.props.displayDrawer });
-    }
-  }
-
-  render() {
-    const { unreadNotifications, handleDisplayDrawer, handleHideDrawer, markAsRead, setNotificationFilter } = this.props;
-    const { isDrawerOpen } = this.state;
-    const drawerStyle = isDrawerOpen ? styles.drawerOpen : styles.drawerClosed;
-
-    return (
-      <div className={css(styles.notificationsContainer)}>
-        {!isDrawerOpen && (
-          <div className={css(styles.menuItem)} data-testid="menuItem" onClick={handleDisplayDrawer}>
-            Your notifications
+  return (
+    <div className={css(styles.notificationsContainer)}>
+      {!isDrawerOpen && (
+        <div className={css(styles.menuItem)} data-testid="menuItem" onClick={handleDisplayDrawer}>
+          Your notifications
+        </div>
+      )}
+      {isDrawerOpen && (
+        <div className={css(styles.notifications, styles.drawerOpen)} data-testid="notifications">
+          <div className={css(styles.drawerHeader)}>
+            <p className={css(styles.headerText)}>Here is your notification list</p>
+            <button className={css(styles.closeButton)} onClick={handleHideDrawer}>X</button>
           </div>
-        )}
-        {isDrawerOpen && (
-          <div className={css(styles.notifications, drawerStyle)} data-testid="notifications">
-            <div className={css(styles.drawerHeader)}>
-              <p className={css(styles.headerText)}>Here is your notification list</p>
-              <button className={css(styles.closeButton)} onClick={handleHideDrawer}>X</button>
-            </div>
-            <div className={css(styles.filterButtons)}>
-              <button onClick={() => setNotificationFilter('URGENT')} className={css(styles.filterButton)}>‼️</button>
-              <button onClick={() => setNotificationFilter('DEFAULT')} className={css(styles.filterButton)}>?</button>
-            </div>
-            <ul className={css(styles.notificationsUl)}>
-              {unreadNotifications && unreadNotifications.map((notification) => (
-                <NotificationItem
-                  key={notification.id}
-                  type={notification.type}
-                  value={notification.value}
-                  html={notification.html}
-                  markAsRead={() => markAsRead(notification.id)}
-                  id={notification.id}
-                />
-              ))}
-            </ul>
+          <div className={css(styles.filterButtons)}>
+            <button onClick={() => setNotificationFilter('URGENT')} className={css(styles.filterButton)}>‼️</button>
+            <button onClick={() => setNotificationFilter('DEFAULT')} className={css(styles.filterButton)}>?</button>
           </div>
-        )}
-      </div>
-    );
-  }
-}
+          <ul className={css(styles.notificationsUl)}>
+            {unreadNotifications && unreadNotifications.map((notification) => (
+              <NotificationItem
+                key={notification.id}
+                type={notification.type}
+                value={notification.value}
+                html={notification.html}
+                markAsRead={() => markAsRead(notification.id)}
+                id={notification.id}
+              />
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  );
+};
 
 Notifications.propTypes = {
   displayDrawer: PropTypes.bool,
@@ -79,7 +59,6 @@ Notifications.propTypes = {
   handleDisplayDrawer: PropTypes.func.isRequired,
   handleHideDrawer: PropTypes.func.isRequired,
   markAsRead: PropTypes.func.isRequired,
-  fetchNotifications: PropTypes.func.isRequired,
   setNotificationFilter: PropTypes.func.isRequired,
 };
 
@@ -198,15 +177,4 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  unreadNotifications: getUnreadNotificationsByType(state),
-  displayDrawer: state.getIn(['ui', 'isNotificationDrawerVisible']),
-});
-
-const mapDispatchToProps = {
-  fetchNotifications,
-  markAsRead,
-  setNotificationFilter,
-};
-
-export default connect(mapStateToProps, mapDispatchToProps)(Notifications);
+export default Notifications;
