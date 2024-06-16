@@ -3,8 +3,8 @@ import PropTypes from 'prop-types';
 import { connect } from 'react-redux';
 import { StyleSheet, css } from 'aphrodite';
 import NotificationItem from './NotificationItem';
-import { fetchNotifications } from '../actions/notificationActionCreators';
-import { Map } from 'immutable';
+import { fetchNotifications, markAsRead } from '../actions/notificationActionCreators';
+import { getUnreadNotifications } from '../selectors/notificationSelector';
 
 export class Notifications extends PureComponent {
   constructor(props) {
@@ -25,7 +25,7 @@ export class Notifications extends PureComponent {
   }
 
   render() {
-    const { listNotifications, handleDisplayDrawer, handleHideDrawer, markNotificationAsRead } = this.props;
+    const { unreadNotifications, handleDisplayDrawer, handleHideDrawer, markAsRead } = this.props;
     const { isDrawerOpen } = this.state;
     const drawerStyle = isDrawerOpen ? styles.drawerOpen : styles.drawerClosed;
 
@@ -43,13 +43,13 @@ export class Notifications extends PureComponent {
               <button className={css(styles.closeButton)} onClick={handleHideDrawer}>X</button>
             </div>
             <ul className={css(styles.notificationsUl)}>
-              {listNotifications && listNotifications.map((notification) => (
+              {unreadNotifications && unreadNotifications.map((notification) => (
                 <NotificationItem
                   key={notification.id}
                   type={notification.type}
                   value={notification.value}
                   html={notification.html}
-                  markAsRead={() => markNotificationAsRead(notification.id)}
+                  markAsRead={() => markAsRead(notification.id)}
                   id={notification.id}
                 />
               ))}
@@ -63,10 +63,18 @@ export class Notifications extends PureComponent {
 
 Notifications.propTypes = {
   displayDrawer: PropTypes.bool,
-  listNotifications: PropTypes.instanceOf(Map).isRequired,
+  unreadNotifications: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    type: PropTypes.string.isRequired,
+    value: PropTypes.string,
+    html: PropTypes.shape({
+      __html: PropTypes.string,
+    }),
+    isRead: PropTypes.bool.isRequired,
+  })).isRequired,
   handleDisplayDrawer: PropTypes.func.isRequired,
   handleHideDrawer: PropTypes.func.isRequired,
-  markNotificationAsRead: PropTypes.func.isRequired,
+  markAsRead: PropTypes.func.isRequired,
   fetchNotifications: PropTypes.func.isRequired,
 };
 
@@ -174,13 +182,19 @@ const styles = StyleSheet.create({
   },
 });
 
-const mapStateToProps = (state) => ({
-  listNotifications: state.getIn(['notifications', 'notifications'], Map()),
-  displayDrawer: state.getIn(['ui', 'isNotificationDrawerVisible']),
-});
+const mapStateToProps = (state) => {
+  console.log('State:', state.toJS()); // Verifique a estrutura do estado no console
+  console.log('Unread Notifications:', getUnreadNotifications(state)); // Verifique as notificações não lidas no console
+  return {
+    unreadNotifications: getUnreadNotifications(state),
+    displayDrawer: state.getIn(['ui', 'isNotificationDrawerVisible']),
+  };
+};
+
 
 const mapDispatchToProps = {
   fetchNotifications,
+  markAsRead,
 };
 
 export default connect(mapStateToProps, mapDispatchToProps)(Notifications);

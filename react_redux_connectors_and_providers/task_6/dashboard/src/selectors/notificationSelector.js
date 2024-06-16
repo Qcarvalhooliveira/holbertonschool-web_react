@@ -1,12 +1,13 @@
 import { createSelector } from 'reselect';
+import { Map } from 'immutable';
 
-export const filterTypeSelected = (state) => state.notifications.filter;
+export const filterTypeSelected = (state) => state.getIn(['notifications', 'filter']);
 
-export const getNotifications = (state) => state.notifications.entities.notifications;
+export const getNotifications = (state) => state.getIn(['notifications', 'notifications'], Map());
 
 export const getUnreadNotifications = createSelector(
   [getNotifications],
   (notifications) => {
-    return Object.values(notifications).filter(notification => !notification.isRead);
+    return notifications.filter(notification => !notification.get('isRead')).toList().toJS();
   }
 );

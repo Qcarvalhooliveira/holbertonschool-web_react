@@ -8,6 +8,7 @@ describe('Notifications', () => {
   const handleDisplayDrawerMock = jest.fn();
   const handleHideDrawerMock = jest.fn();
   const fetchNotificationsMock = jest.fn();
+  const markAsReadMock = jest.fn();
 
   beforeAll(() => {
     StyleSheetTestUtils.suppressStyleInjection();
@@ -25,10 +26,11 @@ describe('Notifications', () => {
     const wrapper = shallow(
       <Notifications
         displayDrawer={false}
-        listNotifications={[]}
+        unreadNotifications={[]}
         handleDisplayDrawer={handleDisplayDrawerMock}
         handleHideDrawer={handleHideDrawerMock}
         fetchNotifications={fetchNotificationsMock}
+        markAsRead={markAsReadMock}
       />
     );
     expect(wrapper.find('[data-testid="menuItem"]').text()).toContain('Your notifications');
@@ -39,10 +41,11 @@ describe('Notifications', () => {
     const wrapper = shallow(
       <Notifications
         displayDrawer={true}
-        listNotifications={[]}
+        unreadNotifications={[]}
         handleDisplayDrawer={handleDisplayDrawerMock}
         handleHideDrawer={handleHideDrawerMock}
         fetchNotifications={fetchNotificationsMock}
+        markAsRead={markAsReadMock}
       />
     );
     expect(wrapper.find('[data-testid="notifications"]').exists()).toBe(true);
@@ -50,19 +53,20 @@ describe('Notifications', () => {
 
   describe('with a list of notifications and displayDrawer true', () => {
     const notifications = [
-      { id: 1, type: 'default', value: 'New course available' },
-      { id: 2, type: 'urgent', value: 'New resume available' },
-      { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' } }
+      { id: 1, type: 'default', value: 'New course available', isRead: false },
+      { id: 2, type: 'urgent', value: 'New resume available', isRead: false },
+      { id: 3, type: 'urgent', html: { __html: '<strong>Urgent requirement</strong> - complete by EOD' }, isRead: false }
     ];
 
     it('renders the correct number of notifications', () => {
       const wrapper = shallow(
         <Notifications
           displayDrawer={true}
-          listNotifications={notifications}
+          unreadNotifications={notifications}
           handleDisplayDrawer={handleDisplayDrawerMock}
           handleHideDrawer={handleHideDrawerMock}
           fetchNotifications={fetchNotificationsMock}
+          markAsRead={markAsReadMock}
         />
       );
       expect(wrapper.find(NotificationItem).length).toBe(notifications.length);
@@ -72,10 +76,11 @@ describe('Notifications', () => {
       const wrapper = shallow(
         <Notifications
           displayDrawer={false}
-          listNotifications={[]}
+          unreadNotifications={[]}
           handleDisplayDrawer={handleDisplayDrawerMock}
           handleHideDrawer={handleHideDrawerMock}
           fetchNotifications={fetchNotificationsMock}
+          markAsRead={markAsReadMock}
         />
       );
       wrapper.find('[data-testid="menuItem"]').simulate('click');
@@ -86,10 +91,11 @@ describe('Notifications', () => {
       const wrapper = shallow(
         <Notifications
           displayDrawer={true}
-          listNotifications={[]}
+          unreadNotifications={[]}
           handleDisplayDrawer={handleDisplayDrawerMock}
           handleHideDrawer={handleHideDrawerMock}
           fetchNotifications={fetchNotificationsMock}
+          markAsRead={markAsReadMock}
         />
       );
       wrapper.find('button').simulate('click');
@@ -101,10 +107,11 @@ describe('Notifications', () => {
     shallow(
       <Notifications
         displayDrawer={false}
-        listNotifications={[]}
+        unreadNotifications={[]}
         handleDisplayDrawer={handleDisplayDrawerMock}
         handleHideDrawer={handleHideDrawerMock}
         fetchNotifications={fetchNotificationsMock}
+        markAsRead={markAsReadMock}
       />
     );
     expect(fetchNotificationsMock).toHaveBeenCalled();
