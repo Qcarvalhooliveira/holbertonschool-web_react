@@ -1,10 +1,24 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import PropTypes from 'prop-types';
 import { StyleSheet, css } from 'aphrodite';
+import { connect } from 'react-redux';
 import CourseListRow from './CourseListRow';
-import CourseShape from './CourseShape';
+import { fetchCourses, selectCourse, unSelectCourse } from '../actions/courseActionCreators';
+import { getCoursesList } from '../selectors/courseSelector';
 
-function CourseList({ listCourses = [] }) {
+function CourseList({ listCourses, fetchCourses, selectCourse, unSelectCourse }) {
+  useEffect(() => {
+    fetchCourses();
+  }, [fetchCourses]);
+
+  const onChangeRow = (id, checked) => {
+    if (checked) {
+      selectCourse(id);
+    } else {
+      unSelectCourse(id);
+    }
+  };
+
   return (
     <table className={css(styles.table)}>
       <thead>
@@ -14,7 +28,14 @@ function CourseList({ listCourses = [] }) {
       <tbody>
         {listCourses.length > 0 ? (
           listCourses.map(course => (
-            <CourseListRow key={course.id} textFirstCell={course.name} textSecondCell={course.credit.toString()} />
+            <CourseListRow
+              key={course.id}
+              textFirstCell={course.name}
+              textSecondCell={course.credit.toString()}
+              onChangeRow={onChangeRow}
+              id={course.id}
+              isChecked={course.isSelected}
+            />
           ))
         ) : (
           <CourseListRow textFirstCell="No course available yet" colSpan="2" />
@@ -25,7 +46,15 @@ function CourseList({ listCourses = [] }) {
 }
 
 CourseList.propTypes = {
-  listCourses: PropTypes.arrayOf(CourseShape)
+  listCourses: PropTypes.arrayOf(PropTypes.shape({
+    id: PropTypes.number.isRequired,
+    name: PropTypes.string.isRequired,
+    credit: PropTypes.number.isRequired,
+    isSelected: PropTypes.bool,
+  })),
+  fetchCourses: PropTypes.func.isRequired,
+  selectCourse: PropTypes.func.isRequired,
+  unSelectCourse: PropTypes.func.isRequired,
 };
 
 CourseList.defaultProps = {
@@ -56,4 +85,14 @@ const styles = StyleSheet.create({
   }
 });
 
-export default CourseList;
+const mapStateToProps = (state) => ({
+  listCourses: getCoursesList(state),
+});
+
+const mapDispatchToProps = {
+  fetchCourses,
+  selectCourse,
+  unSelectCourse,
+};
+
+export default connect(mapStateToProps, mapDispatchToProps)(CourseList);

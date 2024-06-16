@@ -20,6 +20,7 @@ export const setCourses = (data) => ({
 });
 
 export const fetchCourses = () => async (dispatch) => {
+  console.log('fetchCourses called');
   try {
     const response = await fetch('/dist/courses.json');
     if (!response.ok) {
